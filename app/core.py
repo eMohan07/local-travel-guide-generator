@@ -132,7 +132,49 @@ def milestone_4(
     )
 
 
+from app.merger import (
+    DEFAULT_MERGED_DIR,
+    generate_with_merged_model,
+    merge_lora_adapter,
+)
+
 # --- Milestone 5: Implement adapter merging for inference.
 # Hint: Utilize the lfllm-lflora technique to merge the trained LoRA adapter with the base model for efficient inference.
-def milestone_5():  # TODO(milestone 5)
-    raise NotImplementedError("TODO(milestone 5)")
+def milestone_5(
+    adapter_path: Optional[Union[str, Path]] = "models/lora_adapter",
+    output_dir: Optional[Union[str, Path]] = DEFAULT_MERGED_DIR,
+    base_model_name: str = DEFAULT_BASE_MODEL,
+) -> Dict[str, Any]:
+    """Milestone 5: Merge trained LoRA adapter with base model for efficient inference.
+    
+    Applies lfllm-lflora weight merging (W = W0 + (alpha/r)*BA) to create a standalone,
+    zero-overhead model for production inference.
+    """
+    adapter_dir = Path(adapter_path) if adapter_path else Path("models/lora_adapter")
+    if not (adapter_dir / "adapter_config.json").exists():
+        # Ensure trained adapter is available
+        milestone_2(output_dir=str(adapter_dir), epochs=1)
+
+    merged_model, tokenizer, report = merge_lora_adapter(
+        adapter_path=str(adapter_dir),
+        output_dir=output_dir or DEFAULT_MERGED_DIR,
+        base_model_name=base_model_name,
+    )
+
+    sample_guide = generate_with_merged_model(
+        destination="Old Quay & Seafront",
+        interests=["Maritime History", "Seafood"],
+        traveler_profile="History buff seeking scenic sea views",
+        merged_model_dir=output_dir or DEFAULT_MERGED_DIR,
+        max_new_tokens=60,
+    )
+
+    return {
+        "status": "success",
+        "model": merged_model,
+        "tokenizer": tokenizer,
+        "output_dir": str(output_dir or DEFAULT_MERGED_DIR),
+        "is_peft_model": report["is_peft_model"],
+        "merge_report": report,
+        "sample_guide": sample_guide,
+    }

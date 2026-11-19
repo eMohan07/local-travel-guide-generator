@@ -7,7 +7,7 @@ import pytest
 import json
 from pathlib import Path
 import pytest
-from app.core import milestone_1, milestone_2, milestone_3, milestone_4
+from app.core import milestone_1, milestone_2, milestone_3, milestone_4, milestone_5
 from app.dataset import CITY_NAME, format_instruction_prompt, format_recommendation_response
 
 # Milestone 1: Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.
@@ -189,8 +189,51 @@ def test_milestone_4(tmp_path):
     assert saved["total_cases_evaluated"] == report["total_cases_evaluated"]
 
 
+from peft import PeftModel
+from transformers import AutoModelForCausalLM
+
 # Milestone 5: Implement adapter merging for inference.
-@pytest.mark.skip(reason="remove this line when you start milestone 5")
-def test_milestone_5():
-    raise NotImplementedError("write the test for milestone 5")
+def test_milestone_5(tmp_path):
+    test_adapter_dir = tmp_path / "test_lora_adapter"
+    test_merged_dir = tmp_path / "test_merged_model"
+
+    # 1. Prepare a small LoRA adapter for fast merging test
+    sample_data = milestone_1()[:2]
+    milestone_2(
+        output_dir=str(test_adapter_dir),
+        epochs=1,
+        batch_size=2,
+        dataset=sample_data,
+        r=4,
+        lora_alpha=8,
+    )
+
+    # 2. Run milestone 5 adapter merging
+    result = milestone_5(
+        adapter_path=str(test_adapter_dir),
+        output_dir=str(test_merged_dir),
+    )
+
+    # 3. Verify successful merge and PEFT wrapper unloading
+    assert result["status"] == "success"
+    assert result["is_peft_model"] is False
+    assert not isinstance(result["model"], PeftModel)
+
+    # 4. Check exported model weights and configs
+    assert test_merged_dir.exists()
+    assert (test_merged_dir / "config.json").exists()
+    assert (test_merged_dir / "merge_report.json").exists()
+    has_weights = (
+        (test_merged_dir / "model.safetensors").exists()
+        or (test_merged_dir / "pytorch_model.bin").exists()
+    )
+    assert has_weights
+
+    # 5. Check standalone reload using standard HuggingFace AutoModel (no PEFT)
+    loaded_model = AutoModelForCausalLM.from_pretrained(
+        str(test_merged_dir),
+        local_files_only=True,
+    )
+    assert not isinstance(loaded_model, PeftModel)
+    assert sum(p.numel() for p in loaded_model.parameters()) > 100_000_000
 

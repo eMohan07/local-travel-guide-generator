@@ -11,6 +11,7 @@ import streamlit as st
 from app.dataset import CITY_NAME, TRAVEL_RECOMMENDATIONS_DATA
 from app.generator import generate_mini_guide, load_inference_model
 from app.lora_trainer import DEFAULT_ADAPTER_DIR
+from app.merger import DEFAULT_MERGED_DIR, generate_with_merged_model
 
 # Page configuration
 st.set_page_config(
@@ -23,16 +24,30 @@ st.set_page_config(
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# Sidebar: System configuration and LoRA Adapter status
+# Sidebar: System configuration and Model status
 with st.sidebar:
-    st.header("⚙️ Model & LoRA Adapter")
+    st.header("⚙️ Model Configuration")
     adapter_path = DEFAULT_ADAPTER_DIR
     adapter_exists = (Path(adapter_path) / "adapter_config.json").exists()
+    merged_exists = (Path(DEFAULT_MERGED_DIR) / "config.json").exists()
 
-    if adapter_exists:
-        st.success(f"✅ LoRA Adapter Loaded (`{adapter_path}`)")
+    model_mode = st.radio(
+        "Inference Engine",
+        options=["Merged Model (Zero Overhead)", "LoRA Adapter (PEFT)"],
+        index=0 if merged_exists else 1,
+        help="Choose between fully merged standalone weights or dynamically attached LoRA adapter",
+    )
+
+    if model_mode.startswith("Merged"):
+        if merged_exists:
+            st.success(f"✅ Merged Model Active (`{DEFAULT_MERGED_DIR}`)")
+        else:
+            st.info("Merged model not found yet. Run Milestone 5 to fuse weights.")
     else:
-        st.warning(f"⚠️ Adapter not found at `{adapter_path}`. Using base model or knowledge fallback.")
+        if adapter_exists:
+            st.success(f"✅ LoRA Adapter Active (`{adapter_path}`)")
+        else:
+            st.warning(f"⚠️ Adapter not found at `{adapter_path}`.")
 
     st.markdown("**Base LLM:** `GPT-2 (124M)`")
     st.markdown("**Fine-Tuning:** LoRA (PEFT, Rank=8, Alpha=16)")

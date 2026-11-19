@@ -22,7 +22,7 @@ Tick these off as you go, and commit after each one.
       Hint: Use Streamlit to build an interactive interface for users to input details and view generated guides.
 - [x] **4. Evaluate the relevance and appeal of the generated recommendations.**  
       Hint: Qualitatively assess the generated recommendations for relevance, appeal, and personalization.
-- [ ] **5. Implement adapter merging for inference.**  
+- [x] **5. Implement adapter merging for inference.**  
       Hint: Utilize the lfllm-lflora technique to merge the trained LoRA adapter with the base model for efficient inference.
 
 ## Run it
