@@ -18,7 +18,7 @@ Tick these off as you go, and commit after each one.
       Hint: Prepare your dataset by formatting travel interests and recommendations into suitable input-output pairs for language model training.
 - [x] **2. Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).**  
       Hint: Apply the lfllm-lflora technique to inject and train a LoRA adapter on a pre-trained LLM.
-- [ ] **3. Develop a Streamlit UI to input interests and destination, generating a mini-guide.**  
+- [x] **3. Develop a Streamlit UI to input interests and destination, generating a mini-guide.**  
       Hint: Use Streamlit to build an interactive interface for users to input details and view generated guides.
 - [ ] **4. Evaluate the relevance and appeal of the generated recommendations.**  
       Hint: Qualitatively assess the generated recommendations for relevance, appeal, and personalization.

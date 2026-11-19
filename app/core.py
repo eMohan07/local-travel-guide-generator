@@ -1,7 +1,7 @@
 """Your code. One stub per milestone; build them in order and keep each one small."""
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from app.dataset import (
     CITY_NAME,
@@ -84,10 +84,26 @@ def milestone_2(
     }
 
 
+from app.generator import generate_mini_guide, load_inference_model
+
 # --- Milestone 3: Develop a Streamlit UI to input interests and destination, generating a mini-guide.
 # Hint: Use Streamlit to build an interactive interface for users to input details and view generated guides.
-def milestone_3():  # TODO(milestone 3)
-    raise NotImplementedError("TODO(milestone 3)")
+def milestone_3(
+    destination: str = "Lantern Quarter",
+    interests: Union[List[str], str] = "Street Food, Night Markets, Live Acoustic Music",
+    traveler_profile: str = "Solo foodie",
+    adapter_path: Optional[str] = "models/lora_adapter",
+) -> str:
+    """Milestone 3: Generate a personalized mini-guide for tourist interests and destination.
+    
+    Generates tailored local recommendations using the fine-tuned LoRA model.
+    """
+    return generate_mini_guide(
+        destination=destination,
+        interests=interests,
+        traveler_profile=traveler_profile,
+        adapter_path=adapter_path,
+    )
 
 
 # --- Milestone 4: Evaluate the relevance and appeal of the generated recommendations.

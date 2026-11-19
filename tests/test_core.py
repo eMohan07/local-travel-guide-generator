@@ -7,7 +7,7 @@ import pytest
 import json
 from pathlib import Path
 import pytest
-from app.core import milestone_1, milestone_2
+from app.core import milestone_1, milestone_2, milestone_3
 from app.dataset import CITY_NAME, format_instruction_prompt, format_recommendation_response
 
 # Milestone 1: Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.
@@ -112,9 +112,31 @@ def test_milestone_2(tmp_path):
 
 
 # Milestone 3: Develop a Streamlit UI to input interests and destination, generating a mini-guide.
-@pytest.mark.skip(reason="remove this line when you start milestone 3")
 def test_milestone_3():
-    raise NotImplementedError("write the test for milestone 3")
+    # 1. Test the core generation function
+    guide = milestone_3(
+        destination="Lantern Quarter",
+        interests=["Street Food", "Night Markets"],
+        traveler_profile="Solo foodie looking for evening street snacks",
+    )
+    assert isinstance(guide, str)
+    assert len(guide.strip()) > 20
+
+    # 2. Test Streamlit app rendering using AppTest
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file("app/main.py", default_timeout=30)
+    at.run(timeout=30)
+    assert not at.exception
+
+    # Check input widgets exist
+    assert len(at.selectbox) >= 1
+    assert len(at.multiselect) >= 1
+    assert len(at.button) >= 1
+
+    # Simulate user clicking Generate button
+    at.button[0].click().run(timeout=30)
+    assert not at.exception
 
 
 # Milestone 4: Evaluate the relevance and appeal of the generated recommendations.
