@@ -14,7 +14,7 @@ This project, "Local Travel Guide Generator," provides a solution for the Travel
 
 Tick these off as you go, and commit after each one.
 
-- [ ] **1. Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.**  
+- [x] **1. Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.**  
       Hint: Prepare your dataset by formatting travel interests and recommendations into suitable input-output pairs for language model training.
 - [ ] **2. Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).**  
       Hint: Apply the lfllm-lflora technique to inject and train a LoRA adapter on a pre-trained LLM.

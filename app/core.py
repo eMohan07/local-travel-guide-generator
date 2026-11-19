@@ -1,9 +1,27 @@
 """Your code. One stub per milestone; build them in order and keep each one small."""
 
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+from app.dataset import (
+    CITY_NAME,
+    TRAVEL_RECOMMENDATIONS_DATA,
+    format_instruction_prompt,
+    format_recommendation_response,
+    format_dataset_item,
+    prepare_travel_dataset,
+)
+
 # --- Milestone 1: Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.
 # Hint: Prepare your dataset by formatting travel interests and recommendations into suitable input-output pairs for language model training.
-def milestone_1():  # TODO(milestone 1)
-    raise NotImplementedError("TODO(milestone 1)")
+def milestone_1(save_path: Optional[str | Path] = "data/travel_dataset.json") -> List[Dict[str, Any]]:
+    """Milestone 1: Prepare and format a dataset of travel interests and recommendations for Zephyria.
+    
+    Returns:
+        List of formatted training examples with 'input', 'output', and 'text' suitable
+        for fine-tuning a language model with LoRA.
+    """
+    return prepare_travel_dataset(output_path=save_path)
 
 
 # --- Milestone 2: Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).
