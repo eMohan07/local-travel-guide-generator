@@ -106,10 +106,30 @@ def milestone_3(
     )
 
 
+from app.evaluation import (
+    DEFAULT_EVALUATION_REPORT_PATH,
+    BENCHMARK_EVALUATION_CASES,
+    evaluate_single_recommendation,
+    run_qualitative_evaluation,
+)
+
 # --- Milestone 4: Evaluate the relevance and appeal of the generated recommendations.
 # Hint: Qualitatively assess the generated recommendations for relevance, appeal, and personalization.
-def milestone_4():  # TODO(milestone 4)
-    raise NotImplementedError("TODO(milestone 4)")
+def milestone_4(
+    test_cases: Optional[List[Dict[str, Any]]] = None,
+    save_report_path: Optional[Union[str, Path]] = DEFAULT_EVALUATION_REPORT_PATH,
+    adapter_path: Optional[str] = "models/lora_adapter",
+) -> Dict[str, Any]:
+    """Milestone 4: Qualitatively evaluate generated recommendations for relevance, appeal, and personalization.
+    
+    Returns:
+        Evaluation report containing individual and average scores across benchmark cases.
+    """
+    return run_qualitative_evaluation(
+        test_cases=test_cases,
+        save_path=save_report_path,
+        adapter_path=adapter_path,
+    )
 
 
 # --- Milestone 5: Implement adapter merging for inference.

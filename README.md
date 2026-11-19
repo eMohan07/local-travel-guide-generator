@@ -20,7 +20,7 @@ Tick these off as you go, and commit after each one.
       Hint: Apply the lfllm-lflora technique to inject and train a LoRA adapter on a pre-trained LLM.
 - [x] **3. Develop a Streamlit UI to input interests and destination, generating a mini-guide.**  
       Hint: Use Streamlit to build an interactive interface for users to input details and view generated guides.
-- [ ] **4. Evaluate the relevance and appeal of the generated recommendations.**  
+- [x] **4. Evaluate the relevance and appeal of the generated recommendations.**  
       Hint: Qualitatively assess the generated recommendations for relevance, appeal, and personalization.
 - [ ] **5. Implement adapter merging for inference.**  
       Hint: Utilize the lfllm-lflora technique to merge the trained LoRA adapter with the base model for efficient inference.
