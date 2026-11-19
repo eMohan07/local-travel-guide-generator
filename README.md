@@ -16,7 +16,7 @@ Tick these off as you go, and commit after each one.
 
 - [x] **1. Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.**  
       Hint: Prepare your dataset by formatting travel interests and recommendations into suitable input-output pairs for language model training.
-- [ ] **2. Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).**  
+- [x] **2. Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).**  
       Hint: Apply the lfllm-lflora technique to inject and train a LoRA adapter on a pre-trained LLM.
 - [ ] **3. Develop a Streamlit UI to input interests and destination, generating a mini-guide.**  
       Hint: Use Streamlit to build an interactive interface for users to input details and view generated guides.

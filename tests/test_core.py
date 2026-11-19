@@ -7,7 +7,7 @@ import pytest
 import json
 from pathlib import Path
 import pytest
-from app.core import milestone_1
+from app.core import milestone_1, milestone_2
 from app.dataset import CITY_NAME, format_instruction_prompt, format_recommendation_response
 
 # Milestone 1: Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.
@@ -57,9 +57,58 @@ def test_milestone_1(tmp_path):
 
 
 # Milestone 2: Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).
-@pytest.mark.skip(reason="remove this line when you start milestone 2")
-def test_milestone_2():
-    raise NotImplementedError("write the test for milestone 2")
+def test_milestone_2(tmp_path):
+    adapter_dir = tmp_path / "test_lora_adapter"
+    sample_data = milestone_1()[:2]  # Use 2 samples for fast test execution
+
+    result = milestone_2(
+        output_dir=str(adapter_dir),
+        epochs=1,
+        batch_size=2,
+        dataset=sample_data,
+        r=4,
+        lora_alpha=8,
+    )
+
+    # 1. Verify successful output structure
+    assert result["status"] == "success"
+    assert "model" in result
+    assert "tokenizer" in result
+    assert "param_stats" in result
+
+    # 2. Check parameter efficiency (LoRA trains < 1% of total parameters)
+    stats = result["param_stats"]
+    assert stats["trainable_params"] > 0
+    assert stats["all_params"] > 100_000_000  # GPT-2 has ~124M parameters
+    assert stats["trainable_percentage"] < 1.0  # Typically ~0.1% to 0.5%
+    assert stats["lora_rank"] == 4
+
+    # 3. Check base model parameters are frozen while LoRA parameters are trainable
+    model = result["model"]
+    lora_params_found = False
+    for name, param in model.named_parameters():
+        if "lora" in name.lower():
+            lora_params_found = True
+            assert param.requires_grad is True
+        else:
+            assert param.requires_grad is False
+    assert lora_params_found
+
+    # 4. Check saved adapter files
+    assert adapter_dir.exists()
+    assert (adapter_dir / "adapter_config.json").exists()
+    has_weights = (
+        (adapter_dir / "adapter_model.safetensors").exists()
+        or (adapter_dir / "adapter_model.bin").exists()
+    )
+    assert has_weights
+
+    # 5. Check training report & loss history
+    report = result["training_report"]
+    assert report["epochs"] == 1
+    assert len(report["loss_history"]) == 1
+    assert isinstance(report["loss_history"][0], float)
+    assert report["loss_history"][0] > 0.0
 
 
 # Milestone 3: Develop a Streamlit UI to input interests and destination, generating a mini-guide.
