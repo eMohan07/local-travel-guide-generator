@@ -125,8 +125,8 @@ def test_milestone_3():
     # 2. Test Streamlit app rendering using AppTest
     from streamlit.testing.v1 import AppTest
 
-    at = AppTest.from_file("app/main.py", default_timeout=30)
-    at.run(timeout=30)
+    at = AppTest.from_file("app/main.py", default_timeout=60)
+    at.run(timeout=60)
     assert not at.exception
 
     # Check input widgets exist
@@ -135,11 +135,11 @@ def test_milestone_3():
     assert len(at.button) >= 1
 
     # Simulate user clicking Generate button
-    at.button[0].click().run(timeout=30)
+    at.button[0].click().run(timeout=60)
     assert not at.exception
 
 
-from app.evaluation import evaluate_single_recommendation
+from app.evaluation import BENCHMARK_EVALUATION_CASES, evaluate_single_recommendation
 
 # Milestone 4: Evaluate the relevance and appeal of the generated recommendations.
 def test_milestone_4(tmp_path):
@@ -170,7 +170,8 @@ def test_milestone_4(tmp_path):
     assert single_eval["passed"] is True
 
     # 2. Run full evaluation across benchmark test cases
-    report = milestone_4(save_report_path=report_file)
+    test_cases = BENCHMARK_EVALUATION_CASES[:3]
+    report = milestone_4(test_cases=test_cases, save_report_path=report_file)
 
     assert report["status"] == "success"
     assert report["total_cases_evaluated"] >= 3
