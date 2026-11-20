@@ -9,4 +9,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: pytest -v --tb=short
+      - name: Run pytest
+        run: |
+          pytest -v --tb=short 2>&1 | tee test_output.log || (cat test_output.log >> $GITHUB_STEP_SUMMARY && exit 1)
