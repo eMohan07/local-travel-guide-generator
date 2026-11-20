@@ -1,9 +1,12 @@
-"""Your tests. Each milestone in README.md gets one here: write the test first, then make it pass.
+"""Milestone test suite for Zephyria Local Travel Guide Generator.
 
-They start skipped. Remove the `skip` line as you work on each milestone.
+Verifies functionality across Milestones 1 through 5:
+- Milestone 1: Dataset formatting and generation for Zephyria.
+- Milestone 2: LoRA parameter-efficient adapter injection and training.
+- Milestone 3: Mini-guide generation and Streamlit UI functionality.
+- Milestone 4: Qualitative recommendation evaluation against benchmark rubrics.
+- Milestone 5: Standalone zero-overhead adapter weight merging.
 """
-import pytest
-
 import json
 from pathlib import Path
 import pytest

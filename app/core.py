@@ -1,4 +1,8 @@
-"""Your code. One stub per milestone; build them in order and keep each one small."""
+"""Core milestone orchestrator for the Zephyria Local Travel Guide Generator.
+
+Integrates dataset preparation, LoRA adapter injection and training,
+mini-guide generation, qualitative evaluation, and zero-overhead weight merging.
+"""
 
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
@@ -12,8 +16,7 @@ from app.dataset import (
     prepare_travel_dataset,
 )
 
-# --- Milestone 1: Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.
-# Hint: Prepare your dataset by formatting travel interests and recommendations into suitable input-output pairs for language model training.
+# Milestone 1: Prepare a small dataset of travel interests and corresponding local recommendations for a fictional city.
 def milestone_1(save_path: Optional[str | Path] = "data/travel_dataset.json") -> List[Dict[str, Any]]:
     """Milestone 1: Prepare and format a dataset of travel interests and recommendations for Zephyria.
     
@@ -32,8 +35,7 @@ from app.lora_trainer import (
     train_lora_adapter,
 )
 
-# --- Milestone 2: Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).
-# Hint: Apply the lfllm-lflora technique to inject and train a LoRA adapter on a pre-trained LLM.
+# Milestone 2: Implement LoRA adapter injection and training on a pre-trained LLM (e.g., GPT-2).
 def milestone_2(
     model_name: str = DEFAULT_BASE_MODEL,
     output_dir: str = DEFAULT_ADAPTER_DIR,
@@ -86,8 +88,7 @@ def milestone_2(
 
 from app.generator import generate_mini_guide, load_inference_model
 
-# --- Milestone 3: Develop a Streamlit UI to input interests and destination, generating a mini-guide.
-# Hint: Use Streamlit to build an interactive interface for users to input details and view generated guides.
+# Milestone 3: Develop a Streamlit UI to input interests and destination, generating a mini-guide.
 def milestone_3(
     destination: str = "Lantern Quarter",
     interests: Union[List[str], str] = "Street Food, Night Markets, Live Acoustic Music",
@@ -113,8 +114,7 @@ from app.evaluation import (
     run_qualitative_evaluation,
 )
 
-# --- Milestone 4: Evaluate the relevance and appeal of the generated recommendations.
-# Hint: Qualitatively assess the generated recommendations for relevance, appeal, and personalization.
+# Milestone 4: Evaluate the relevance and appeal of the generated recommendations.
 def milestone_4(
     test_cases: Optional[List[Dict[str, Any]]] = None,
     save_report_path: Optional[Union[str, Path]] = DEFAULT_EVALUATION_REPORT_PATH,
@@ -138,8 +138,7 @@ from app.merger import (
     merge_lora_adapter,
 )
 
-# --- Milestone 5: Implement adapter merging for inference.
-# Hint: Utilize the lfllm-lflora technique to merge the trained LoRA adapter with the base model for efficient inference.
+# Milestone 5: Implement adapter merging for inference.
 def milestone_5(
     adapter_path: Optional[Union[str, Path]] = "models/lora_adapter",
     output_dir: Optional[Union[str, Path]] = DEFAULT_MERGED_DIR,

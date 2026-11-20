@@ -1,4 +1,4 @@
-"""These pass on day one. They check the plumbing so you notice quickly if you break it."""
+"""Smoke test suite checking core environment plumbing, storage persistence, and Streamlit app compilation."""
 import os
 
 from app import llm
